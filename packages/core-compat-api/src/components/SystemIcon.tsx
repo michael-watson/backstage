@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-import { useApp } from '@backstage/core-plugin-api';
-import React from 'react';
+import React, { ComponentProps } from 'react';
+import { useApp, IconComponent } from '@backstage/core-plugin-api';
 import { compatWrapper } from '../compatWrapper';
 
 /**
  * @public
- * Props for the System Icon component.
+ * Props for the SystemIcon component.
  */
-export type SystemIconProps = {
+export type SystemIconProps = ComponentProps<IconComponent> & {
   // The id of the system icon to render.
   id: string;
-  // An optional fallback element to render when the system icon is not found.
-  fallback?: JSX.Element;
+  // An optional fallback icon component to render when the system icon is not found.
+  // Default to () => null.
+  Fallback?: IconComponent;
 };
 
 function SystemIcon(props: SystemIconProps) {
-  const { id, fallback = null } = props;
+  const { id, Fallback = () => null, ...rest } = props;
   const app = useApp();
-  const Component = app.getSystemIcon(id);
-  return Component ? <Component /> : fallback;
+  const Component = app.getSystemIcon(id) ?? Fallback;
+  return <Component {...rest} />;
 }
 
 /**
@@ -44,9 +45,26 @@ function SystemIcon(props: SystemIconProps) {
  * ```tsx
  * <SystemIcon id="kind:api" />
  * ```
+ * @example
+ * Customizing the fallback icon:
+ * ```tsx
+ * <SystemIcon id="kind:api" Fallback={ApiFallbackIcon} />
+ * ```
+ * @example
+ * Customizing the icon font size:
+ * ```tsx
+ * <SystemIcon id="kind:api" fontSize="medium" />
+ * ```
  */
 function CompatSystemIcon(props: SystemIconProps) {
-  return compatWrapper(<SystemIcon {...props} />);
+  try {
+    // Check if the app context is available
+    useApp();
+    return <SystemIcon {...props} />;
+  } catch {
+    // Fallback to the compat wrapper if the app context is not available
+    return compatWrapper(<SystemIcon {...props} />);
+  }
 }
 
 export { CompatSystemIcon as SystemIcon };
