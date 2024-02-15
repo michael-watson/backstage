@@ -15,7 +15,11 @@
  */
 
 import request from 'supertest';
-import { mockServices, startTestBackend } from '@backstage/backend-test-utils';
+import {
+  mockCredentials,
+  mockServices,
+  startTestBackend,
+} from '@backstage/backend-test-utils';
 import { ExtendedHttpServer } from '@backstage/backend-app-api';
 import { kubernetesObjectsProviderExtensionPoint } from '@backstage/plugin-kubernetes-node';
 import { createBackendModule } from '@backstage/backend-plugin-api';
@@ -102,12 +106,6 @@ describe('resourcesRoutes', () => {
                 },
               ],
             },
-            backend: {
-              auth: {
-                // TODO: Remove once migrated to support new auth services
-                dangerouslyDisableDefaultAuthPolicy: true,
-              },
-            },
           },
         }),
         import('@backstage/plugin-kubernetes-backend/alpha'),
@@ -141,7 +139,6 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(200, {
           items: [
             {
@@ -168,7 +165,6 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: { name: 'InputError', message: 'entity is a required field' },
           request: {
@@ -189,7 +185,6 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: {
             name: 'InputError',
@@ -214,7 +209,6 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: {
             name: 'InputError',
@@ -228,9 +222,10 @@ describe('resourcesRoutes', () => {
         });
     });
     // eslint-disable-next-line jest/expect-expect
-    it('401 when no Auth header', async () => {
+    it('403 when no Auth header', async () => {
       await request(app)
         .post('/api/kubernetes/resources/workloads/query')
+        .set('authorization', mockCredentials.none.header())
         .send({
           entityRef: 'component:someComponent',
           auth: {
@@ -238,13 +233,16 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .expect(401, {
-          error: { name: 'AuthenticationError', message: 'No Backstage token' },
+        .expect(403, {
+          error: {
+            name: 'NotAllowedError',
+            message: "This endpoint does not allow 'none' credentials",
+          },
           request: {
             method: 'POST',
             url: '/api/kubernetes/resources/workloads/query',
           },
-          response: { statusCode: 401 },
+          response: { statusCode: 403 },
         });
     });
     // eslint-disable-next-line jest/expect-expect
@@ -258,9 +256,12 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'ffffff')
+        .set('Authorization', mockCredentials.user.invalidHeader())
         .expect(401, {
-          error: { name: 'AuthenticationError', message: 'No Backstage token' },
+          error: {
+            name: 'AuthenticationError',
+            message: 'User token is invalid',
+          },
           request: {
             method: 'POST',
             url: '/api/kubernetes/resources/workloads/query',
@@ -279,7 +280,6 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(500, {
           error: {
             name: 'Error',
@@ -312,7 +312,6 @@ describe('resourcesRoutes', () => {
           ],
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(200, {
           items: [
             {
@@ -340,7 +339,6 @@ describe('resourcesRoutes', () => {
           },
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: {
             name: 'InputError',
@@ -365,7 +363,6 @@ describe('resourcesRoutes', () => {
           customResources: 'somestring',
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: {
             name: 'InputError',
@@ -390,7 +387,6 @@ describe('resourcesRoutes', () => {
           customResources: [],
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: {
             name: 'InputError',
@@ -420,7 +416,6 @@ describe('resourcesRoutes', () => {
           ],
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: { name: 'InputError', message: 'entity is a required field' },
           request: {
@@ -448,7 +443,6 @@ describe('resourcesRoutes', () => {
           ],
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: {
             name: 'InputError',
@@ -480,7 +474,6 @@ describe('resourcesRoutes', () => {
           ],
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(400, {
           error: {
             name: 'InputError',
@@ -494,9 +487,10 @@ describe('resourcesRoutes', () => {
         });
     });
     // eslint-disable-next-line jest/expect-expect
-    it('401 when no Auth header', async () => {
+    it('403 when no Auth header', async () => {
       await request(app)
         .post('/api/kubernetes/resources/custom/query')
+        .set('authorization', mockCredentials.none.header())
         .send({
           entityRef: 'component:someComponent',
           auth: {
@@ -511,13 +505,16 @@ describe('resourcesRoutes', () => {
           ],
         })
         .set('Content-Type', 'application/json')
-        .expect(401, {
-          error: { name: 'AuthenticationError', message: 'No Backstage token' },
+        .expect(403, {
+          error: {
+            name: 'NotAllowedError',
+            message: "This endpoint does not allow 'none' credentials",
+          },
           request: {
             method: 'POST',
             url: '/api/kubernetes/resources/custom/query',
           },
-          response: { statusCode: 401 },
+          response: { statusCode: 403 },
         });
     });
     // eslint-disable-next-line jest/expect-expect
@@ -538,9 +535,12 @@ describe('resourcesRoutes', () => {
           ],
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'ffffff')
+        .set('Authorization', mockCredentials.user.invalidHeader())
         .expect(401, {
-          error: { name: 'AuthenticationError', message: 'No Backstage token' },
+          error: {
+            name: 'AuthenticationError',
+            message: 'User token is invalid',
+          },
           request: {
             method: 'POST',
             url: '/api/kubernetes/resources/custom/query',
@@ -566,7 +566,6 @@ describe('resourcesRoutes', () => {
           ],
         })
         .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer Zm9vYmFy')
         .expect(500, {
           error: {
             name: 'Error',
