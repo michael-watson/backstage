@@ -5,6 +5,7 @@
 ```ts
 /// <reference types="node" />
 
+import { BackstageCredentials } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { DocumentCollatorFactory } from '@backstage/plugin-search-common';
 import { DocumentDecoratorFactory } from '@backstage/plugin-search-common';
@@ -14,9 +15,8 @@ import { IndexableResultSet } from '@backstage/plugin-search-common';
 import { Logger } from 'winston';
 import { default as lunr_2 } from 'lunr';
 import { Permission } from '@backstage/plugin-permission-common';
-import { QueryTranslator } from '@backstage/plugin-search-common';
+import { QueryTranslator as QueryTranslator_2 } from '@backstage/plugin-search-common';
 import { Readable } from 'stream';
-import { SearchEngine } from '@backstage/plugin-search-common';
 import { SearchQuery } from '@backstage/plugin-search-common';
 import { TaskFunction } from '@backstage/backend-tasks';
 import { TaskRunner } from '@backstage/backend-tasks';
@@ -95,7 +95,7 @@ export class LunrSearchEngine implements SearchEngine {
   // (undocumented)
   setTranslator(translator: LunrQueryTranslator): void;
   // (undocumented)
-  protected translator: QueryTranslator;
+  protected translator: QueryTranslator_2;
 }
 
 // @public
@@ -145,6 +145,18 @@ export type NewlineDelimitedJsonCollatorFactoryOptions = {
 };
 
 // @public
+export type QueryRequestOptions =
+  | {
+      token?: string;
+    }
+  | {
+      credentials: BackstageCredentials;
+    };
+
+// @public
+export type QueryTranslator = (query: SearchQuery) => unknown;
+
+// @public
 export interface RegisterCollatorParameters {
   factory: DocumentCollatorFactory;
   schedule: TaskRunner;
@@ -169,6 +181,16 @@ export type ScheduleTaskParameters = {
   task: TaskFunction;
   scheduledRunner: TaskRunner;
 };
+
+// @public
+export interface SearchEngine {
+  getIndexer(type: string): Promise<Writable>;
+  query(
+    query: SearchQuery,
+    options?: QueryRequestOptions,
+  ): Promise<IndexableResultSet>;
+  setTranslator(translator: QueryTranslator): void;
+}
 
 // @public
 export class TestPipeline {
