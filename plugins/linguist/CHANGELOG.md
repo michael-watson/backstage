@@ -1,5 +1,20 @@
 # @backstage/plugin-linguist
 
+## 0.1.16
+
+### Patch Changes
+
+- 786c9c4: Updated dependency `luxon` to `^3.0.0`.
+- Updated dependencies
+  - @backstage/catalog-model@1.4.4
+  - @backstage/core-compat-api@0.2.0
+  - @backstage/core-components@0.14.0
+  - @backstage/core-plugin-api@1.9.0
+  - @backstage/errors@1.2.3
+  - @backstage/frontend-plugin-api@0.6.0
+  - @backstage/plugin-catalog-react@1.10.0
+  - @backstage/plugin-linguist-common@0.1.2
+
 ## 0.1.15
 
 ### Patch Changes

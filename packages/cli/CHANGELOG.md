@@ -1,5 +1,22 @@
 # @backstage/cli
 
+## 0.25.3
+
+### Patch Changes
+
+- 999224f: Bump dependency `minimatch` to v9
+- Updated dependencies
+  - @backstage/eslint-plugin@0.1.6
+  - @backstage/catalog-model@1.4.4
+  - @backstage/cli-common@0.1.13
+  - @backstage/cli-node@0.2.3
+  - @backstage/config@1.1.1
+  - @backstage/config-loader@1.6.2
+  - @backstage/errors@1.2.3
+  - @backstage/integration@1.9.0
+  - @backstage/release-manifests@0.0.11
+  - @backstage/types@1.1.1
+
 ## 0.25.2
 
 ### Patch Changes

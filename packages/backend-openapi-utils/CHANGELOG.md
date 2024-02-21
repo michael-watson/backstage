@@ -1,5 +1,14 @@
 # @backstage/backend-openapi-utils
 
+## 0.1.4
+
+### Patch Changes
+
+- 85ec23e: Updated dependency `json-schema-to-ts` to `^3.0.0`.
+- Updated dependencies
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/errors@1.2.3
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,23 @@
 # @backstage/plugin-catalog-backend-module-github
 
+## 0.5.1
+
+### Patch Changes
+
+- 999224f: Bump dependency `minimatch` to v9
+- Updated dependencies
+  - @backstage/backend-common@0.21.1
+  - @backstage/plugin-catalog-backend@1.17.1
+  - @backstage/backend-tasks@0.5.16
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/catalog-client@1.6.0
+  - @backstage/catalog-model@1.4.4
+  - @backstage/config@1.1.1
+  - @backstage/integration@1.9.0
+  - @backstage/plugin-catalog-common@1.0.21
+  - @backstage/plugin-catalog-node@1.7.1
+  - @backstage/plugin-events-node@0.2.20
+
 ## 0.5.0
 
 ### Minor Changes

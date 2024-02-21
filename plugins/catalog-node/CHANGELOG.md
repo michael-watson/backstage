@@ -1,5 +1,19 @@
 # @backstage/plugin-catalog-node
 
+## 1.7.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-permission-node@0.7.22
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/catalog-client@1.6.0
+  - @backstage/catalog-model@1.4.4
+  - @backstage/errors@1.2.3
+  - @backstage/types@1.1.1
+  - @backstage/plugin-catalog-common@1.0.21
+  - @backstage/plugin-permission-common@0.7.12
+
 ## 1.7.0
 
 ### Minor Changes

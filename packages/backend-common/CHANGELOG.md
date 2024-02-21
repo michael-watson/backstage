@@ -1,5 +1,24 @@
 # @backstage/backend-common
 
+## 0.21.1
+
+### Patch Changes
+
+- 999224f: Bump dependency `minimatch` to v9
+- 2af5354: Bump dependency `jose` to v5
+- ff40ada: Updated dependency `mysql2` to `^3.0.0`.
+- Updated dependencies
+  - @backstage/backend-app-api@0.5.12
+  - @backstage/backend-dev-utils@0.1.4
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/cli-common@0.1.13
+  - @backstage/config@1.1.1
+  - @backstage/config-loader@1.6.2
+  - @backstage/errors@1.2.3
+  - @backstage/integration@1.9.0
+  - @backstage/integration-aws-node@0.1.9
+  - @backstage/types@1.1.1
+
 ## 0.21.0
 
 ### Minor Changes

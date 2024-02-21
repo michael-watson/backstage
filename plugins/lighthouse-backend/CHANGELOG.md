@@ -1,5 +1,20 @@
 # @backstage/plugin-lighthouse-backend
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/backend-common@0.21.1
+  - @backstage/backend-tasks@0.5.16
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/catalog-client@1.6.0
+  - @backstage/catalog-model@1.4.4
+  - @backstage/config@1.1.1
+  - @backstage/types@1.1.1
+  - @backstage/plugin-catalog-node@1.7.1
+  - @backstage/plugin-lighthouse-common@0.1.4
+
 ## 0.4.2
 
 ### Patch Changes

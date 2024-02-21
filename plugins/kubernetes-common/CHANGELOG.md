@@ -1,5 +1,15 @@
 # @backstage/plugin-kubernetes-common
 
+## 0.7.5
+
+### Patch Changes
+
+- 4642cb7: Add support to fetch data for Daemon Sets and display an accordion in the same way as with Deployments
+- Updated dependencies
+  - @backstage/catalog-model@1.4.4
+  - @backstage/types@1.1.1
+  - @backstage/plugin-permission-common@0.7.12
+
 ## 0.7.4
 
 ### Patch Changes

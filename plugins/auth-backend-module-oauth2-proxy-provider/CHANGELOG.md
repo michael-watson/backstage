@@ -1,5 +1,16 @@
 # @backstage/plugin-auth-backend-module-oauth2-proxy-provider
 
+## 0.1.4
+
+### Patch Changes
+
+- 2af5354: Bump dependency `jose` to v5
+- b1b012d: Fix issue with `providerInfo` not being set properly for some proxy providers, by making `providerInfo` an explicit optional return from `authenticate`
+- Updated dependencies
+  - @backstage/plugin-auth-node@0.4.6
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/errors@1.2.3
+
 ## 0.1.2
 
 ### Patch Changes

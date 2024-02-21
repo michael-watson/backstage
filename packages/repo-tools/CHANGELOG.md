@@ -1,5 +1,17 @@
 # @backstage/repo-tools
 
+## 0.6.1
+
+### Patch Changes
+
+- 999224f: Bump dependency `minimatch` to v9
+- Updated dependencies
+  - @backstage/backend-common@0.21.1
+  - @backstage/catalog-model@1.4.4
+  - @backstage/cli-common@0.1.13
+  - @backstage/cli-node@0.2.3
+  - @backstage/errors@1.2.3
+
 ## 0.6.0
 
 ### Minor Changes

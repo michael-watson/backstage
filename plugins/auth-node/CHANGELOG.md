@@ -1,5 +1,20 @@
 # @backstage/plugin-auth-node
 
+## 0.4.6
+
+### Patch Changes
+
+- 2af5354: Bump dependency `jose` to v5
+- b1b012d: Fix issue with `providerInfo` not being set properly for some proxy providers, by making `providerInfo` an explicit optional return from `authenticate`
+- Updated dependencies
+  - @backstage/backend-common@0.21.1
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/catalog-client@1.6.0
+  - @backstage/catalog-model@1.4.4
+  - @backstage/config@1.1.1
+  - @backstage/errors@1.2.3
+  - @backstage/types@1.1.1
+
 ## 0.4.4
 
 ### Patch Changes

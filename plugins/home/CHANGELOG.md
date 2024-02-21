@@ -1,5 +1,26 @@
 # @backstage/plugin-home
 
+## 0.6.3
+
+### Patch Changes
+
+- 0cecb09: Updated dependency `@rjsf/utils` to `5.17.1`.
+  Updated dependency `@rjsf/core` to `5.17.1`.
+  Updated dependency `@rjsf/material-ui` to `5.17.1`.
+  Updated dependency `@rjsf/validator-ajv8` to `5.17.1`.
+- Updated dependencies
+  - @backstage/plugin-home-react@0.1.9
+  - @backstage/catalog-client@1.6.0
+  - @backstage/catalog-model@1.4.4
+  - @backstage/config@1.1.1
+  - @backstage/core-app-api@1.12.0
+  - @backstage/core-compat-api@0.2.0
+  - @backstage/core-components@0.14.0
+  - @backstage/core-plugin-api@1.9.0
+  - @backstage/frontend-plugin-api@0.6.0
+  - @backstage/theme@0.5.1
+  - @backstage/plugin-catalog-react@1.10.0
+
 ## 0.6.2
 
 ### Patch Changes

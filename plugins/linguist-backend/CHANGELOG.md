@@ -1,5 +1,23 @@
 # @backstage/plugin-linguist-backend
 
+## 0.5.8
+
+### Patch Changes
+
+- 786c9c4: Updated dependency `luxon` to `^3.0.0`.
+- Updated dependencies
+  - @backstage/backend-common@0.21.1
+  - @backstage/plugin-auth-node@0.4.6
+  - @backstage/backend-tasks@0.5.16
+  - @backstage/backend-plugin-api@0.6.11
+  - @backstage/catalog-client@1.6.0
+  - @backstage/catalog-model@1.4.4
+  - @backstage/config@1.1.1
+  - @backstage/errors@1.2.3
+  - @backstage/types@1.1.1
+  - @backstage/plugin-catalog-node@1.7.1
+  - @backstage/plugin-linguist-common@0.1.2
+
 ## 0.5.7
 
 ### Patch Changes
