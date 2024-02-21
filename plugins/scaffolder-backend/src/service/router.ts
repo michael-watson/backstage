@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { PluginDatabaseManager, UrlReader } from '@backstage/backend-common';
+import {
+  PluginDatabaseManager,
+  UrlReader,
+  createLegacyAuthAdapters,
+} from '@backstage/backend-common';
 import { PluginTaskScheduler } from '@backstage/backend-tasks';
 import { CatalogApi } from '@backstage/catalog-client';
 import {
@@ -78,7 +82,14 @@ import {
 } from '@backstage/plugin-permission-node';
 import { scaffolderActionRules, scaffolderTemplateRules } from './rules';
 import { Duration } from 'luxon';
-import { LifecycleService } from '@backstage/backend-plugin-api';
+import {
+  AuthService,
+  BackstageCredentials,
+  DiscoveryService,
+  HttpAuthService,
+  LifecycleService,
+  PermissionsService,
+} from '@backstage/backend-plugin-api';
 
 /**
  *
@@ -143,11 +154,14 @@ export interface RouterOptions {
   taskBroker?: TaskBroker;
   additionalTemplateFilters?: Record<string, TemplateFilter>;
   additionalTemplateGlobals?: Record<string, TemplateGlobal>;
-  permissions?: PermissionEvaluator;
+  permissions?: PermissionsService;
   permissionRules?: Array<
     TemplatePermissionRuleInput | ActionPermissionRuleInput
   >;
   identity?: IdentityApi;
+  auth?: AuthService;
+  httpAuth?: HttpAuthService;
+  discovery: DiscoveryService;
 }
 
 function isSupportedTemplate(entity: TemplateEntityV1beta3) {
@@ -236,6 +250,8 @@ const readDuration = (
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
+  const { auth, httpAuth } = createLegacyAuthAdapters(options);
+
   const router = Router();
   // Be generous in upload size to support a wide range of templates in dry-run mode.
   router.use(express.json({ limit: '10MB' }));
@@ -394,12 +410,18 @@ export async function createRouter(
     .get(
       '/v2/templates/:namespace/:kind/:name/parameter-schema',
       async (req, res) => {
-        const userIdentity = await identity.getIdentity({
-          request: req,
-        });
-        const token = userIdentity?.token;
+        const credentials = await httpAuth.credentials(req);
 
-        const template = await authorizeTemplate(req.params, token);
+        const { token } = await auth.getPluginRequestToken({
+          onBehalfOf: credentials,
+          targetPluginId: 'catalog',
+        });
+
+        const template = await authorizeTemplate(
+          req.params,
+          token,
+          credentials,
+        );
 
         const parameters = [template.spec.parameters ?? []].flat();
 
@@ -438,7 +460,13 @@ export async function createRouter(
       const callerIdentity = await identity.getIdentity({
         request: req,
       });
-      const token = callerIdentity?.token;
+
+      const credentials = await httpAuth.credentials(req);
+
+      const { token } = await auth.getPluginRequestToken({
+        onBehalfOf: credentials,
+        targetPluginId: 'catalog',
+      });
       const userEntityRef = callerIdentity?.identity.userEntityRef;
 
       const userEntity = userEntityRef
@@ -456,6 +484,7 @@ export async function createRouter(
       const template = await authorizeTemplate(
         { kind, namespace, name },
         token,
+        credentials,
       );
 
       for (const parameters of [template.spec.parameters ?? []].flat()) {
@@ -636,11 +665,10 @@ export async function createRouter(
         throw new InputError('Input template is not a template');
       }
 
-      const token = (
-        await identity.getIdentity({
-          request: req,
-        })
-      )?.token;
+      const { token } = await auth.getPluginRequestToken({
+        onBehalfOf: await httpAuth.credentials(req),
+        targetPluginId: 'scaffolder',
+      });
 
       for (const parameters of [template.spec.parameters ?? []].flat()) {
         const result = validate(body.values, parameters);
@@ -691,6 +719,7 @@ export async function createRouter(
   async function authorizeTemplate(
     entityRef: CompoundEntityRef,
     token: string | undefined,
+    credentials: BackstageCredentials,
   ) {
     const template = await findTemplate({
       catalogApi: catalogClient,
@@ -716,7 +745,7 @@ export async function createRouter(
           { permission: templateParameterReadPermission },
           { permission: templateStepReadPermission },
         ],
-        { token },
+        { credentials },
       );
 
     // Authorize parameters
